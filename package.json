@@ -4,6 +4,7 @@
   "description": "",
   "main": "izapi.js",
   "scripts": {
+    "start": "node izapi.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,16 @@
   "bugs": {
     "url": "https://github.com/jeongwoo0427/izapi/issues"
   },
-  "homepage": "https://github.com/jeongwoo0427/izapi#readme"
+  "homepage": "https://github.com/jeongwoo0427/izapi#readme",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-validator": "^6.14.3",
+    "formidable": "^2.1.1",
+    "fs": "^0.0.1-security",
+    "mysql2": "^3.1.2",
+    "nodemon": "^2.0.20",
+    "path": "^0.12.7"
+  }
 }
