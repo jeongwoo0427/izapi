@@ -1,0 +1,19 @@
+{
+  "name": "izapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "izapi.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeongwoo0427/izapi.git"
+  },
+  "author": "veiz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeongwoo0427/izapi/issues"
+  },
+  "homepage": "https://github.com/jeongwoo0427/izapi#readme"
+}
