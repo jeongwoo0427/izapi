@@ -4,7 +4,7 @@
   "description": "",
   "main": "izapi.js",
   "scripts": {
-    "start": "node izapi.js",
+    "start": "nodemon izapi.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,8 +24,12 @@
     "express-validator": "^6.14.3",
     "formidable": "^2.1.1",
     "fs": "^0.0.1-security",
+    "morgan": "^1.10.0",
     "mysql2": "^3.1.2",
     "nodemon": "^2.0.20",
-    "path": "^0.12.7"
+    "nunjucks": "^3.2.3",
+    "path": "^0.12.7",
+    "sequelize": "^6.28.0",
+    "sequelize-cli": "^6.6.0"
   }
 }
