@@ -4,20 +4,26 @@
     "password": "wjddn6462",
     "database": "izdb",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone":"Asia/Seoul",
+    "dateStrings":true
   },
   "test": {
     "username": "root",
     "password": "wjddn6462",
     "database": "database_test",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone":"Asia/Seoul",
+    "dateStrings":true
   },
   "production": {
     "username": "root",
     "password": "wjddn6462",
     "database": "database_production",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone":"Asia/Seoul",
+    "dateStrings":true
   }
 }
