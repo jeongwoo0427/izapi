@@ -17,6 +17,14 @@ module.exports = class SplatBannerReceiptModel extends Sequelize.Model {
                 type: Sequelize.INTEGER,
                 allowNull: false
             },
+            badge2No: {
+                type: Sequelize.INTEGER,
+                allowNull: false
+            },
+            badge3No: {
+                type: Sequelize.INTEGER,
+                allowNull: false
+            },
             nickname : {
                 type: Sequelize.STRING(30),
                 allowNull: false,

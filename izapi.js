@@ -6,15 +6,7 @@ const {sequelize} = require('./app/models')
 
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(cors());
-
-const port = 31;
-
-app.use('/',function(req,res,next){
-    next();
-});
+const port = 33;
 
 sequelize.sync({force:true}).then(()=>{
     console.log('데이터베이스 연결 성공');
@@ -22,9 +14,17 @@ sequelize.sync({force:true}).then(()=>{
     console.error('sequelize 오류)'+err);
 })
 
-//app.use('/api/story',require('./app/router/story_router'))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(cors());
+
+app.use('/',function(req,res,next){
+    //console.log(req.path);
+    next();
+});
 
 
+app.use('/api/splatBannerMaker',require('./app/router/splat_banner_router'));
 
 
 app.use(function (req, res, next) {

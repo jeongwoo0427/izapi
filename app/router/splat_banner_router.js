@@ -1,4 +1,7 @@
 const router = require('express').Router();
+const splatBannerController = require('../controller/splat_banner_controller');
+
+router.post('/',splatBannerController.insertReceipt);
 
 
-router.get('/',)
+module.exports = router;
