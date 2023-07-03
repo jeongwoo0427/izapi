@@ -6,7 +6,7 @@ module.exports = {
             const result = await SplatBannerReceiptModel.create(req.body);
             return res.send(result);
         }catch(err){
-            next(err);
+            return next(err);
         }
     }
 }
