@@ -54,7 +54,7 @@ module.exports = {
 
 
                 else if (msg == '~하이') {
-                    responseMsgs = [{msg:'안녕하세용'}];
+                    responseMsgs = [{msg:'안녕하세요.'}];
                 }
 
            
@@ -74,7 +74,7 @@ module.exports = {
                     { msg: '3', delayMs: 3000 }, 
                     { msg: '2', delayMs: 4000 }, 
                     { msg: '1', delayMs: 5000 },
-                    { msg: '빵야!', delayMs: 6000 }
+                    { msg: '끝!', delayMs: 6000 }
                 ];
                 }
 
@@ -91,7 +91,7 @@ module.exports = {
                 }
 
                 else if (msg == '~끝말잇기') {
-                    responseMsgs = [{msg:`좋아요 시작할게용.`},
+                    responseMsgs = [{msg:`좋아요 시작할게요.`},
                     { msg: '칼륨', delayMs: 1500}, 
                     { msg: '이겼네요 ㅎㅎ', delayMs: 3000}, 
                 ];
@@ -173,12 +173,12 @@ module.exports = {
   
   
 //   };
-//     const response = org.jsoup.Jsoup.connect(host+"/api/kakao/messageReply")
+//     const response = org.jsoup.Jsoup.connect(host+"/api/common/messageReply")
 //     .header("Content-Type", "application/json")
 //     .requestBody(JSON.stringify(data))
 //     .ignoreContentType(true)
 //     .ignoreHttpErrors(true)
-//     .timeout(8000)
+//     .timeout(50000)
 //     .post();
     
     
