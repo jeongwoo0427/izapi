@@ -109,12 +109,12 @@ module.exports = {
 
 
                 else{
-                    const startMessage =`\n\n앞으로 한 줄로 요약해줘.\n\n알겠습니다.\n\n${msg.substring(1,msg.length)}\n\n`;
+                    const startMessage =`${msg.substring(1,msg.length)}`;
                     
                     const openAIResponse = await openAIModule.create(startMessage);
                     console.log('발화='+startMessage);
                     console.log(openAIResponse);
-                    responseMsgs = [{msg:openAIResponse.choices[0].text.trimLeft()}];
+                    responseMsgs = [{msg:openAIResponse.choices[0].message.content}];
                 }
 
                 
@@ -153,7 +153,7 @@ module.exports = {
 // function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   
 //     const key = 'bdfortablet1';
-//     const host = 'http://182.222.81.5:1133';
+//     const host = 'http://182.172.171.168:33';
 //     sendData(key,host, room, msg, sender, isGroupChat, replier, imageDB, packageName);
 
 // }
