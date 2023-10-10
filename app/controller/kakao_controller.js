@@ -22,8 +22,7 @@ module.exports = {
 
                 if (msg.trim() == '~') {
                     responseMsgs = [
-                        {msg:`
-                    커맨드리스트 
+                        {msg:`커맨드리스트 v1.0 
 
                         ~굿모닝 : 아침인사는 기분이 좋아요.
 
@@ -68,7 +67,7 @@ module.exports = {
 
                 else if (msg=='~카운트') {
                     responseMsgs = [
-                    { msg: '카운트 다운 시작할게용', delayMs: 0 }, 
+                    { msg: '카운트 다운 시작할게요.', delayMs: 0 }, 
                     { msg: '5', delayMs: 1000 }, 
                     { msg: '4', delayMs: 2000 }, 
                     { msg: '3', delayMs: 3000 }, 
