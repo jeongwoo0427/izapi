@@ -24,6 +24,7 @@ app.use('/',function(req,res,next){
 });
 
 
+app.use('/api/common',require('./app/router/common_router'));
 app.use('/api/splatBannerMaker',require('./app/router/splat_banner_router'));
 
 
