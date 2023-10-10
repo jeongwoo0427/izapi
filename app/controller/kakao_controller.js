@@ -32,6 +32,8 @@ module.exports = {
 
                         ~가위바위보 : 가위바위보를 실시합니다. 시작됨과 동시에 바로 답을 입력해두세요^^
 
+                        ~와이파이 : 와이파이 정보 및 비밀번호를 알려드려요.
+
                         ~기타 : GPT의 힘을 빌려올게요 ^^.
                         
                         끝.`}
@@ -74,6 +76,12 @@ module.exports = {
                     { msg: '2', delayMs: 4000 }, 
                     { msg: '1', delayMs: 5000 },
                     { msg: '끝!', delayMs: 6000 }
+                ];
+                }
+
+                else if (msg=='~와이파이') {
+                    responseMsgs = [
+                    { msg: 'ID : inpsyt , PW : 023305114'}, 
                 ];
                 }
 
