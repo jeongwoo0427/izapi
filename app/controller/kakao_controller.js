@@ -3,7 +3,7 @@ const openAIModule = require('../module/openai_module');
 
 
 
-const botKey = 'bdfortablet2';
+const botKey = 'bdfortablet2'; sdfs
 
 module.exports = {
     messageReply: async (req, res, next) => {
