@@ -1,4 +1,4 @@
-const SplatBannerReceiptModel = require('../models/splat_banner_receipt_model');
+const SplatBannerReceiptModel = require('../../models/splat_banner_receipt_model');
 
 module.exports = {
     insertReceipt : async (req,res,next) =>{

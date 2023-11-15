@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-const {sequelize} = require('./app/models')
+const {sequelize} = require('./models')
 
 const app = express();
 
@@ -24,8 +24,8 @@ app.use('/',function(req,res,next){
 });
 
 
-app.use('/api/common',require('./app/router/common_router'));
-app.use('/api/splatBannerMaker',require('./app/router/splat_banner_router'));
+app.use('/api/common',require('./router/common/index'));
+app.use('/api/splatBannerMaker',require('./router/splat_banner/index'));
 
 
 app.use(function (req, res, next) {

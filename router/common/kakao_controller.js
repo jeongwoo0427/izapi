@@ -1,9 +1,9 @@
-const commoneModule = require('../module/common_module');
-const openAIModule = require('../module/openai_module');
+const commoneModule = require('../../module/common_module');
+const openAIModule = require('../../module/openai_module');
 
 
 
-const botKey = 'bdfortablet2'; sdfs
+const botKey = 'bdfortablet2';
 
 module.exports = {
     messageReply: async (req, res, next) => {
