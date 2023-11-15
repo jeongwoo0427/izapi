@@ -120,6 +120,8 @@ dist
 .vscode-test
 
 config.json
+config/secret_config.json
+config/db_config.json
 
 # yarn v2
 .yarn/cache

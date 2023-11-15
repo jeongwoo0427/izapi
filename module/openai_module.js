@@ -2,10 +2,10 @@
 //import OpenAI from "openai";
 
 const OpenAI = require('openai');
-const config = require('../config.json');
+const secretConfig = require('../config/secret_config.json');
 
 const openai = new OpenAI({
-  apiKey: config.openAI,
+  apiKey: secretConfig.openAI,
 });
 
 
