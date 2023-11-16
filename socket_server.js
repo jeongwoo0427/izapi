@@ -9,6 +9,12 @@ const io = require('socket.io')(http, {
     }
 });
 
+const rooms={
+    'code1234':{
+        users : [],
+    }
+};
+
 // CORS 설정
 app.use(cors());
 
@@ -21,7 +27,15 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
+    socket.on('joinRoom', (data) =>{
+        const {roomCode, user} = data;
+        rooms[roomCode].users.push(user);
+        socket.join(roomCode); 
+        console.log(rooms);
+    });
+
     socket.on('disconnect', () => {
+        
         console.log('user disconnected');
     });
 });
