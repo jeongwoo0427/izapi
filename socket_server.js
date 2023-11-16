@@ -1,33 +1,33 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
-
-const port = 34;
-const server = app.listen(port, function() {
-    console.log('Socket Server is listening on port',port);
+const http = require('http').createServer(app);
+const io = require('socket.io')(http, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
 });
 
-const SocketIO = require('socket.io');
-const io = SocketIO(server, {path: '/socket.io'});
+// CORS 설정
+app.use(cors());
 
-io.on('connection', function (socket) {
-    console.log(socket.id, ' connected...');
-    
-    // broadcasting a entering message to everyone who is in the chatroom
-    io.emit('msg', `${socket.id} has entered the chatroom.`);
-  
-  	// message receives
-    socket.on('msg', function (data) {
-        console.log(socket.id,': ', data);
-        // broadcasting a message to everyone except for the sender
-        socket.broadcast.emit('msg', `${socket.id}: ${data}`);
-    });
+// 기본 라우트 설정
+app.get('/', (req, res) => {
+    res.send('<h1>Socket.io Server is running</h1>');
+});
 
-    // user connection lost
-    socket.on('disconnect', function (data) {
-        io.emit('msg', `${socket.id} has left the chatroom.`);
+// Socket.io 연결 이벤트 처리
+io.on('connection', (socket) => {
+    console.log('User connected:', socket.id);
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
     });
 });
 
-app.get('/chat', function(req, res) {
-    res.sendFile(__dirname + '/html/socket_client.html');
+// 서버 시작
+const PORT = 34;
+http.listen(PORT, () => {
+    console.log(`Socket Server is listening on port`,PORT);
 });
