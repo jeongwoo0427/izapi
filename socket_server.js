@@ -23,14 +23,29 @@ app.get('/', (req, res) => {
     res.send('<h1>Socket.io Server is running</h1>');
 });
 
+
 // Socket.io 연결 이벤트 처리
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
     socket.on('joinRoom', (data) =>{
         const {roomCode, user} = data;
-        rooms[roomCode].users.push(user);
+
+        if(rooms[roomCode] == null) return socket.emit('error', { code: 'ROOM_NOT_FOUND' });
+
+        const userInfo = {
+            socketId : socket.id,
+            id : user.id,
+            name : user.name,
+            connectedTime : Date.now()
+        }
+        rooms[roomCode].users.push(userInfo); //users에서 오류가 난다면 방 생성시 발생한 오류
+
         socket.join(roomCode); 
+        io.to(roomCode).emit('roomJoined', {
+            roomCode,
+            userInfo
+        })
         console.log(rooms);
     });
 
