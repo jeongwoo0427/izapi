@@ -29,15 +29,15 @@ app.get('/', (req, res) => {
     res.send('<h1>Socket.io Server is running</h1>');
 });
 
-setInterval(() => {
-    rooms.forEach((value,key,map)=>{
-        value.users.forEach((value,key,map)=>{
-            io.to(key).emit('hey',key);
-            console.log('sent message to ',key);
-        });
-    });
+// setInterval(() => {
+//     rooms.forEach((value,key,map)=>{
+//         value.users.forEach((value,key,map)=>{
+//             io.to(key).emit('hey',key);
+//             console.log('sent message to ',key);
+//         });
+//     });
     
-}, 1000);
+// }, 1000);
 
 
 // Socket.io 연결 이벤트 처리
@@ -59,8 +59,8 @@ io.on('connection', (socket) => {
         const users = rooms.get(roomCode).users;//users에서 오류가 난다면 방 생성시 발생한 오류
 
 
-
-        //기존 사용자가 있는지 먼저 확인
+        
+        //기존 사용자가 있는지 먼저 확인 (아이디 조건도 추가하기)
         const sameUser = users.get(userInfo.socketId);
 
         if (sameUser == null) {
