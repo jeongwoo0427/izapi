@@ -9,9 +9,9 @@ const io = require('socket.io')(http, {
     }
 });
 const { addUser, userJoinRoom, getUser, getUsers, deleteUser, userQuitRoom } = require('./module/socket_user_module');
+const ChatMessageModel = require('./models/chat_message_model');
+const CN = ChatMessageModel.CN;
 
-
-const users = new Map();
 
 // CORS 설정
 app.use(cors());
@@ -67,6 +67,15 @@ io.on('connection', (socket) => {
             io.to(data.roomCode).emit('messageReceived', data);
             console.log(`[${Date.now()}]message sent! `, data);
         }
+
+        ChatMessageModel.create({
+            [CN.uuid] : data[CN.uuid],
+            [CN.roomCode] : data[CN.roomCode],
+            [CN.type] : data[CN.type],
+            [CN.content] : data[CN.content],
+            [CN.userId] : data[CN.userId],
+            [CN.userName] : data[CN.userName]
+        })
     });
 
     socket.on('quitRoom', (_) => {

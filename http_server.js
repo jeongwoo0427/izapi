@@ -27,6 +27,7 @@ app.use('/',function(req,res,next){
 app.use('/api/common',require('./router/common/index'));
 app.use('/api/splatBannerMaker',require('./router/splat_banner/index'));
 
+app.use('/api/chat',require('./router/chat/index'));
 
 app.use(function (req, res, next) {
     res.status(404).send('Sorry can not find page!');
