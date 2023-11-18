@@ -8,6 +8,7 @@ const io = require('socket.io')(http, {
         methods: ["GET", "POST"]
     }
 });
+const { addUser, userJoinRoom, getUser,getUsers,deleteUser, userQuitRoom } = require('./module/socket_user_module');
 
 
 // const rooms = {
@@ -15,11 +16,7 @@ const io = require('socket.io')(http, {
 //         users: [],
 //     }
 // };
-
-const rooms = new Map();
-rooms.set('code1234', {
-    users: new Map()
-});
+const users = new Map();
 
 // CORS 설정
 app.use(cors());
@@ -36,80 +33,54 @@ app.get('/', (req, res) => {
 //             console.log('sent message to ',key);
 //         });
 //     });
-    
+
 // }, 1000);
 
 
 // Socket.io 연결 이벤트 처리
 io.on('connection', (socket) => {
     console.log(`[${Date.now()}]User connected:`, socket.id);
+    addUser(socket.id, null, null);
 
     socket.on('joinRoom', (data) => {
-        const { roomCode, user } = data;
-        const userInfo = {
-            socketId: socket.id,
-            id: user.id,
-            name: user.name,
-            connectedTime: Date.now()
-        }
-        if (rooms.get(roomCode) == null) return socket.emit('error', { code: 'ROOM_NOT_FOUND' });
+        const { roomCode, userId, userName } = data;
 
-
-
-        const users = rooms.get(roomCode).users;//users에서 오류가 난다면 방 생성시 발생한 오류
-
-
-        
-        //기존 사용자가 있는지 먼저 확인 (아이디 조건도 추가하기)
-        const sameUser = users.get(userInfo.socketId);
-
-        if (sameUser == null) {
-            rooms.get(roomCode).users.set(userInfo.socketId, userInfo);
-        } else {
-            //소켓이 바뀌었을 경우 새로운 정보로 갱신
-            sameUser.id = userInfo.id;
-            sameUser.name = userInfo.name;
-        }
+        const beforeUser = getUser(socket.id);
 
         socket.join(roomCode);
 
-        if (sameUser == null) {
+
+        if (beforeUser?.roomCode == null) {
             //기존에 없는 사용자가 들어올 경우 모든 사용자에게 알림
             io.to(roomCode).emit('roomJoined', {
-                roomCode,
-                userInfo
+                beforeUser
             });
         }
 
+        userJoinRoom(socket.id, userId, userName, roomCode);
+
         console.log(`[${Date.now()}]joined room!`);
-        console.log(rooms.get(roomCode));
+        console.log(getUsers());
     });
 
-    socket.on('quitRoom', (data) => {
-        const { roomCode, user } = data;
-        const userInfo = {
-            socketId: socket.id,
-            id: user.id,
-            name: user.name,
-            connectedTime: Date.now()
+    socket.on('quitRoom', (_) => {
+
+        const user = getUser(socket.id);
+
+        if (user.roomCode != null) {
+            io.to(user.roomCode).emit('roomLeft', {
+                user
+            });
         }
-        if (rooms.get(roomCode) == null) return socket.emit('error', { code: 'ROOM_NOT_FOUND' });
 
-        //rooms[roomCode].users.find((user) => {;
-        rooms.get(roomCode).users.delete(socket.id);
-
-        io.to(roomCode).emit('roomLeft', {
-            roomCode,
-            userInfo
-        });
+        userQuitRoom(socket.id);
 
         console.log(`[${Date.now()}]left room!`);
-        console.log(rooms.get(roomCode));
-
+        console.log(getUsers());
     });
 
     socket.on('disconnect', () => {
-
+        deleteUser(socket.id);
         console.log('user disconnected');
     });
 });
