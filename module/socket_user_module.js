@@ -2,25 +2,22 @@
 const users = new Map();
 
 module.exports = {
-    addUser : (socketId,userId,userName) =>{
+    addUser : (socketId,userInfo) =>{
         const user = {
-            userId : userId,
-            userName : userName,
+            userInfo : userInfo,
             connectedTime: Date.now(), 
         }
         users.set(socketId, user);
     },
-    userJoinRoom: (socketId,userId,userName, roomCode) =>{
+    userJoinRoom: (socketId , userInfo, roomCode) =>{
         
         const user = users.get(socketId);
 
         console.log(user);
 
-        user.userId = userId;
-        user.userName = userName;
+        user.userInfo = userInfo;
         user.roomCode = roomCode;
 
-        
         users.set(socketId,user);
 
     },

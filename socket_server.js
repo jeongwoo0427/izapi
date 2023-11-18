@@ -8,14 +8,9 @@ const io = require('socket.io')(http, {
         methods: ["GET", "POST"]
     }
 });
-const { addUser, userJoinRoom, getUser,getUsers,deleteUser, userQuitRoom } = require('./module/socket_user_module');
+const { addUser, userJoinRoom, getUser, getUsers, deleteUser, userQuitRoom } = require('./module/socket_user_module');
 
 
-// const rooms = {
-//     'code1234': {
-//         users: [],
-//     }
-// };
 const users = new Map();
 
 // CORS 설정
@@ -43,7 +38,7 @@ io.on('connection', (socket) => {
     addUser(socket.id, null, null);
 
     socket.on('joinRoom', (data) => {
-        const { roomCode, userId, userName } = data;
+        const { roomCode, userInfo } = data;
 
         const beforeUser = getUser(socket.id);
 
@@ -53,14 +48,24 @@ io.on('connection', (socket) => {
         if (beforeUser?.roomCode == null) {
             //기존에 없는 사용자가 들어올 경우 모든 사용자에게 알림
             io.to(roomCode).emit('roomJoined', {
-                beforeUser
+                userInfo
             });
         }
 
-        userJoinRoom(socket.id, userId, userName, roomCode);
+        userJoinRoom(socket.id, userInfo, roomCode);
 
         console.log(`[${Date.now()}]joined room!`);
         console.log(getUsers());
+    });
+
+    socket.on('sendMessage', (data) => {
+
+        const user = getUser(socket.id);
+        console.log(user);
+        if (user?.roomCode == data.roomCode) {
+            io.to(data.roomCode).emit('messageReceived', data);
+            console.log(`[${Date.now()}]message sent! `, data);
+        }
     });
 
     socket.on('quitRoom', (_) => {
