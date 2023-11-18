@@ -48,7 +48,8 @@ io.on('connection', (socket) => {
         if (beforeUser?.roomCode == null) {
             //기존에 없는 사용자가 들어올 경우 모든 사용자에게 알림
             io.to(roomCode).emit('roomJoined', {
-                userInfo
+                socketId : socket.id,
+                userInfo : userInfo
             });
         }
 
@@ -74,7 +75,8 @@ io.on('connection', (socket) => {
 
         if (user.roomCode != null) {
             io.to(user.roomCode).emit('roomLeft', {
-                user
+                'socketId' : socket.id,
+                'userInfo' : user
             });
         }
 
