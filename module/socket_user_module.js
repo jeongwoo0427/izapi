@@ -13,7 +13,7 @@ module.exports = {
         
         const user = users.get(socketId);
 
-        console.log(user);
+        //console.log(user);
 
         user.userInfo = userInfo;
         user.roomCode = roomCode;
@@ -32,6 +32,16 @@ module.exports = {
     },
     getUsers : () =>{
         return users;
+    },
+
+    getRoomUsers : (roomCode) =>{
+        const roomUsers = new Map();
+        users.forEach((value,key,map)=>{
+            if(value.roomCode == roomCode){
+                roomUsers.set(key,value);
+            }
+        });
+        return roomUsers;
     },
     deleteUser : (socketId) =>{
         users.delete(socketId);

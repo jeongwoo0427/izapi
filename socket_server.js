@@ -8,8 +8,10 @@ const io = require('socket.io')(http, {
         methods: ["GET", "POST"]
     }
 });
-const { addUser, userJoinRoom, getUser, getUsers, deleteUser, userQuitRoom } = require('./module/socket_user_module');
+const { addUser, userJoinRoom, getUser, getUsers, deleteUser, userQuitRoom,getRoomUsers } = require('./module/socket_user_module');
 const ChatMessageModel = require('./models/chat_message_model');
+const { keys } = require('nunjucks/src/lib');
+const { Value } = require('nunjucks/src/nodes');
 const CN = ChatMessageModel.CN;
 
 
@@ -30,11 +32,19 @@ app.get('/', (req, res) => {
 //     });
 
 // }, 1000);
+function callUpdateRoomUsers(roomCode,io){
+    const roomUsers = [];
+    getRoomUsers(roomCode).forEach((value,key,map)=>{
+        roomUsers.push(value.userInfo); 
+    });
 
+   // console.log(roomUsers);
+    io.to(roomCode).emit('updateRoomUsers',roomUsers);
+}
 
 // Socket.io 연결 이벤트 처리
 io.on('connection', (socket) => {
-    console.log(`[${Date.now()}]User connected:`, socket.id);
+    //console.log(`[${Date.now()}]User connected:`, socket.id);
     addUser(socket.id, null, null);
 
     socket.on('joinRoom', (data) => {
@@ -49,23 +59,26 @@ io.on('connection', (socket) => {
             //기존에 없는 사용자가 들어올 경우 모든 사용자에게 알림
             io.to(roomCode).emit('roomJoined', {
                 socketId : socket.id,
-                userInfo : userInfo
+                userInfo : userInfo,
             });
         }
 
         userJoinRoom(socket.id, userInfo, roomCode);
 
-        console.log(`[${Date.now()}]joined room!`);
-        console.log(getUsers());
+        callUpdateRoomUsers(roomCode,io);
+    
+        
+        //console.log(`[${Date.now()}]joined room!`);
+        //console.log(getUsers());
     });
 
     socket.on('sendMessage', (data) => {
 
         const user = getUser(socket.id);
-        console.log(user);
+        //console.log(user);
         if (user?.roomCode == data.roomCode) {
             io.to(data.roomCode).emit('messageReceived', data);
-            console.log(`[${Date.now()}]message sent! `, data);
+            //console.log(`[${Date.now()}]message sent! `, data);
         }
 
         ChatMessageModel.create({
@@ -91,13 +104,15 @@ io.on('connection', (socket) => {
 
         userQuitRoom(socket.id);
 
-        console.log(`[${Date.now()}]left room!`);
-        console.log(getUsers());
+        callUpdateRoomUsers(roomCode,io);
+
+        // console.log(`[${Date.now()}]left room!`);
+        // console.log(getUsers());
     });
 
     socket.on('disconnect', () => {
         deleteUser(socket.id);
-        console.log('user disconnected');
+        //console.log('user disconnected');
     });
 });
 
