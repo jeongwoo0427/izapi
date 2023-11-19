@@ -94,8 +94,9 @@ io.on('connection', (socket) => {
     socket.on('quitRoom', (_) => {
 
         const user = getUser(socket.id);
+        const roomCode = user.roomCode;
 
-        if (user.roomCode != null) {
+        if (roomCode != null) {
             io.to(user.roomCode).emit('roomLeft', {
                 'socketId' : socket.id,
                 'userInfo' : user
