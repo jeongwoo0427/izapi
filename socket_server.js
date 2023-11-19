@@ -44,7 +44,7 @@ function callUpdateRoomUsers(roomCode,io){
 
 // Socket.io 연결 이벤트 처리
 io.on('connection', (socket) => {
-    //console.log(`[${Date.now()}]User connected:`, socket.id);
+    console.log(`[${Date.now()}]User connected:`, socket.id);
     addUser(socket.id, null, null);
 
     socket.on('joinRoom', (data) => {
@@ -112,8 +112,10 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
+        const roomCode = getUser(socket.id)?.roomCode;
         deleteUser(socket.id);
-        //console.log('user disconnected');
+        callUpdateRoomUsers(roomCode,io);
+        console.log('user disconnected');
     });
 });
 
