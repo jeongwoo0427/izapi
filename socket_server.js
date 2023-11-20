@@ -8,7 +8,7 @@ const io = require('socket.io')(http, {
         methods: ["GET", "POST"]
     }
 });
-const { addUser, userJoinRoom, getUser, getUsers, deleteUser, userQuitRoom,getRoomUsers } = require('./module/socket_user_module');
+const { addUser, userJoinRoom, getUserBySocket, getUserByID, getUsers, deleteUser, userQuitRoom,getRoomUsers } = require('./module/socket_user_module');
 const ChatMessageModel = require('./models/chat_message_model');
 const { keys } = require('nunjucks/src/lib');
 const { Value } = require('nunjucks/src/nodes');
@@ -38,8 +38,18 @@ function callUpdateRoomUsers(roomCode,io){
         roomUsers.push(value.userInfo); 
     });
 
+    //한 채팅방 안에 다른 소켓의 같은 아이디가 있을 경우 알아서 중복에대해 처리를 하도록.
+    const uniqueRoomUsers = [];
+    roomUsers.forEach((element)=>{
+        let addThis = true;
+        for(let i = 0; i<uniqueRoomUsers.length; i++){
+            if(element.userId == uniqueRoomUsers[i].userId) addThis = false;
+        }
+        if(addThis) uniqueRoomUsers.push(element);
+    })
+
    // console.log(roomUsers);
-    io.to(roomCode).emit('updateRoomUsers',roomUsers);
+    io.to(roomCode).emit('updateRoomUsers',uniqueRoomUsers);
 }
 
 // Socket.io 연결 이벤트 처리
@@ -50,13 +60,15 @@ io.on('connection', (socket) => {
     socket.on('joinRoom', (data) => {
         const { roomCode, userInfo } = data;
 
-        const beforeUser = getUser(socket.id);
+        const beforeSocket = getUserBySocket(socket.id);
+        const beforeUser = getUserByID(userInfo.userId);
 
         socket.join(roomCode);
 
-
-        if (beforeUser?.roomCode == null) {
-            //기존에 없는 사용자가 들어올 경우 모든 사용자에게 알림
+        //기존에 없는 사용자가 들어올 경우 모든 사용자에게 알림
+        //그리고 만약 기존의 사용자의 ID가 남아있다면 알림 불가 (소켓 유지후 방 1회 입장 후에 재입장도 알림불가)
+        if (beforeSocket?.roomCode == null&&beforeUser == null) {
+            
             io.to(roomCode).emit('roomJoined', {
                 socketId : socket.id,
                 userInfo : userInfo,
@@ -74,7 +86,7 @@ io.on('connection', (socket) => {
 
     socket.on('sendMessage', (data) => {
 
-        const user = getUser(socket.id);
+        const user = getUserBySocket(socket.id);
         //console.log(user);
         if (user?.roomCode == data.roomCode) {
             io.to(data.roomCode).emit('messageReceived', data);
@@ -93,7 +105,7 @@ io.on('connection', (socket) => {
 
     socket.on('quitRoom', (_) => {
 
-        const user = getUser(socket.id);
+        const user = getUserBySocket(socket.id);
         const roomCode = user.roomCode;
 
         if (roomCode != null) {
@@ -112,7 +124,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        const roomCode = getUser(socket.id)?.roomCode;
+        const roomCode = getUserBySocket(socket.id)?.roomCode;
         deleteUser(socket.id);
         callUpdateRoomUsers(roomCode,io);
         console.log('user disconnected');

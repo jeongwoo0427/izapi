@@ -27,8 +27,15 @@ module.exports = {
 
         users.set(socketId,user);
     },
-    getUser : (socketId) =>{
+    getUserBySocket : (socketId) =>{
         return users.get(socketId);
+    },
+    getUserByID : (userId)=>{
+        let user;
+        users.forEach((value,key,map)=>{
+            if(value.userInfo?.userId == userId) user = map;
+        });
+        return user;
     },
     getUsers : () =>{
         return users;
