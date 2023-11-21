@@ -3,10 +3,11 @@ const cors = require('cors');
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
+    path: '/chat',
     cors: {
         origin: "*",
-        methods: ["GET", "POST"]
-    }
+        methods: ["GET", "POST"],
+    },
 });
 const { addUser,updateUserInfo, userJoinRoom, getUserBySocket, getUserByID, getUsers, deleteUser, userQuitRoom,getRoomUsers } = require('./module/socket_user_module');
 const ChatMessageModel = require('./models/chat_message_model');
