@@ -2,12 +2,18 @@
 const users = new Map();
 
 module.exports = {
-    addUser : (socketId,userInfo) =>{
+    addUser : (socketId) =>{
         const user = {
-            userInfo : userInfo,
+            userInfo : null,
             connectedTime: Date.now(), 
         }
         users.set(socketId, user);
+    },
+    updateUserInfo : (socketId, userInfo) =>{
+        //console.log(userInfo);
+        const user = users.get(socketId);
+        user.userInfo = userInfo;
+        users.set(socketId,user);
     },
     userJoinRoom: (socketId , userInfo, roomCode) =>{
         
@@ -31,6 +37,7 @@ module.exports = {
         return users.get(socketId);
     },
     getUserByID : (userId)=>{
+      //  console.log(userId);
         let user;
         users.forEach((value,key,map)=>{
             if(value.userInfo?.userId == userId) user = map;
