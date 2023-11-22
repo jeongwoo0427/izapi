@@ -61,14 +61,12 @@ io.on('connection', (socket) => {
     socket.on('joinRoom', (data) => {
         const { roomCode, userInfo } = data;
 
-        const beforeSocket = getUserBySocket(socket.id);
-        const beforeUser = getUserByID(userInfo.userId);
-        console.log(beforeUser);
+        const beforeSocket = getUserBySocket(socket.id); 
 
         socket.join(roomCode);
 
         //기존에 없는 사용자가 들어올 경우 모든 사용자에게 알림
-        if (beforeSocket?.roomCode == null && beforeUser== null) {
+        if (beforeSocket?.roomCode == null) {
             
             io.to(roomCode).emit('roomJoined', {
                 socketId : socket.id,
