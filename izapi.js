@@ -1,7 +1,7 @@
 
 require('./servers/api_server');
-require('./servers/chat_socket_server');
-require('./servers/game_socket_server')
+//require('./servers/chat_socket_server');
+//require('./servers/game_socket_server')
 
 
 
